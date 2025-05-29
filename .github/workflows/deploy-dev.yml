@@ -34,13 +34,25 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
 
+    - name: Verify AWS credentials
+      run: |
+        echo "🔍 Verifying AWS credentials..."
+        aws sts get-caller-identity
+        echo "🔍 AWS Region: $AWS_REGION"
+        echo "✅ AWS credentials verified successfully"
+
     - name: Terraform Format Check
       id: fmt
       run: terraform fmt -check
 
     - name: Terraform Init
       id: init
-      run: terraform init
+      run: |
+        echo "🔍 Debug: Initializing Terraform..."
+        echo "🔍 Debug: Current directory: $(pwd)"
+        echo "🔍 Debug: Backend configuration:"
+        cat backend.tf
+        terraform init -no-color
 
     - name: Terraform Validate
       id: validate
@@ -48,7 +60,16 @@ jobs:
 
     - name: Terraform Plan
       id: plan
-      run: terraform plan -var-file="${{ env.TF_VAR_file }}" -no-color -input=false
+      run: |
+        echo "🔍 Debug: Current working directory: $(pwd)"
+        echo "🔍 Debug: Listing files in current directory:"
+        ls -la
+        echo "🔍 Debug: AWS Region: $AWS_REGION"
+        echo "🔍 Debug: TF_VAR_file: $TF_VAR_file"
+        echo "🔍 Debug: Checking if tfvars file exists:"
+        ls -la "$TF_VAR_file"
+        echo "🔍 Debug: Running terraform plan..."
+        terraform plan -var-file="$TF_VAR_file" -no-color -input=false
 
     - name: Terraform Apply
       id: apply
@@ -105,7 +126,7 @@ jobs:
           echo "**Service Endpoints:**" >> $GITHUB_STEP_SUMMARY
           echo "- 🌐 **API Gateway**: http://${{ steps.outputs.outputs.alb_dns }}" >> $GITHUB_STEP_SUMMARY
           echo "- 👤 **User Service**: http://${{ steps.outputs.outputs.alb_dns }}/users" >> $GITHUB_STEP_SUMMARY
-          echo "- 🏪 **Store Service**: http://${{ steps.outputs.outputs.alb_dns }}/stores" >> $GITHUB_STEP_SUMMARY
+          echo "- �� **Store Service**: http://${{ steps.outputs.outputs.alb_dns }}/stores" >> $GITHUB_STEP_SUMMARY
           echo "- 📦 **Order Service**: http://${{ steps.outputs.outputs.alb_dns }}/orders" >> $GITHUB_STEP_SUMMARY
           echo "- 📊 **Traefik Dashboard**: http://${{ steps.outputs.outputs.alb_dns }}:8080" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY

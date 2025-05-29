@@ -1,5 +1,5 @@
 # Backend configuration for Terraform state
-# Uncomment and configure for production environments
+# For production/staging, use S3 backend (commented out for now):
 # 
 # terraform {
 #   backend "s3" {
@@ -11,9 +11,8 @@
 #   }
 # }
 
-# For local development, comment the above and use local backend
+# For local development and CI/CD, use local backend
+# This works for both local development and GitHub Actions
 terraform {
-  backend "local" {
-    path = "./terraform.tfstate"
-  }
+  backend "local" {}
 } 
