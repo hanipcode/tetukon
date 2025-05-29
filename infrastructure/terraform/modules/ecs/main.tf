@@ -191,8 +191,6 @@ resource "aws_service_discovery_service" "services" {
     routing_policy = "MULTIVALUE"
   }
 
-  health_check_grace_period_seconds = 30
-
   tags = {
     Name    = "${var.project_name}-${var.environment}-${each.key}-discovery"
     Service = each.key
