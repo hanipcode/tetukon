@@ -1,0 +1,96 @@
+# Traefik Dynamic Configuration
+http:
+  routers:
+    # User Service Router
+    user-service-router:
+      rule: "PathPrefix(`/users`)"
+      service: "user-service"
+      entryPoints:
+        - "web"
+      middlewares:
+        - "strip-users-prefix"
+
+    # Store Service Router
+    store-service-router:
+      rule: "PathPrefix(`/stores`)"
+      service: "store-service"
+      entryPoints:
+        - "web"
+      middlewares:
+        - "strip-stores-prefix"
+
+    # Order Service Router
+    order-service-router:
+      rule: "PathPrefix(`/orders`)"
+      service: "order-service"
+      entryPoints:
+        - "web"
+      middlewares:
+        - "strip-orders-prefix"
+
+  middlewares:
+    # Strip /users prefix for user service
+    strip-users-prefix:
+      stripPrefix:
+        prefixes:
+          - "/users"
+
+    # Strip /stores prefix for store service
+    strip-stores-prefix:
+      stripPrefix:
+        prefixes:
+          - "/stores"
+
+    # Strip /orders prefix for order service
+    strip-orders-prefix:
+      stripPrefix:
+        prefixes:
+          - "/orders"
+
+    # CORS middleware for cross-origin requests
+    cors-headers:
+      headers:
+        accessControlAllowMethods:
+          - "GET"
+          - "POST"
+          - "PUT"
+          - "DELETE"
+          - "OPTIONS"
+        accessControlAllowHeaders:
+          - "Content-Type"
+          - "Authorization"
+        accessControlAllowOriginList:
+          - "*"
+        accessControlMaxAge: 100
+        addVaryHeader: true
+
+  services:
+    # User Service
+    user-service:
+      loadBalancer:
+        servers:
+          - url: "http://user-service:3001"
+        healthCheck:
+          path: "/health"
+          interval: "10s"
+          timeout: "3s"
+
+    # Store Service
+    store-service:
+      loadBalancer:
+        servers:
+          - url: "http://store-service:3002"
+        healthCheck:
+          path: "/health"
+          interval: "10s"
+          timeout: "3s"
+
+    # Order Service
+    order-service:
+      loadBalancer:
+        servers:
+          - url: "http://order-service:3003"
+        healthCheck:
+          path: "/health"
+          interval: "10s"
+          timeout: "3s" 

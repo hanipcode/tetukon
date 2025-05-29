@@ -1,12 +1,28 @@
 {
-  "name": "my-turborepo",
+  "name": "microservice-e-commerce",
   "private": true,
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run check-types"
+    "type-check": "turbo run type-check",
+    "clean": "turbo run clean",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "infra:deploy": "./scripts/build-and-deploy.sh",
+    "infra:deploy-local": "./scripts/build-and-deploy.sh local",
+    "terraform:plan": "./scripts/terraform-deploy.sh plan",
+    "terraform:deploy": "./scripts/terraform-deploy.sh deploy",
+    "terraform:full-deploy": "./scripts/terraform-deploy.sh full-deploy",
+    "terraform:update": "./scripts/terraform-deploy.sh update",
+    "terraform:status": "./scripts/terraform-deploy.sh status",
+    "terraform:destroy": "./scripts/terraform-deploy.sh destroy",
+    "aws:deploy": "./scripts/terraform-deploy.sh full-deploy",
+    "aws:plan": "./scripts/terraform-deploy.sh plan",
+    "aws:destroy": "./scripts/terraform-deploy.sh destroy"
   },
   "devDependencies": {
     "prettier": "^3.5.3",

@@ -1,0 +1,101 @@
+networks:
+  microservice_network:
+    driver: bridge
+
+services:
+  # Traefik API Gateway
+  traefik:
+    image: traefik:v3.0
+    container_name: traefik-gateway
+    restart: unless-stopped
+    ports:
+      - "8000:8000"  # API Gateway port
+      - "8080:8080"  # Traefik dashboard
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./infrastructure/traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./infrastructure/traefik/dynamic.yml:/etc/traefik/dynamic.yml:ro
+    networks:
+      - microservice_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.rule=Host(`localhost`)"
+      - "traefik.http.routers.traefik.entrypoints=traefik"
+
+  # User Service
+  user-service:
+    build:
+      context: ./apps/user-service
+      dockerfile: Dockerfile
+    container_name: user-service
+    restart: unless-stopped
+    environment:
+      - PORT=3001
+      - NODE_ENV=production
+    expose:
+      - "3001"
+    networks:
+      - microservice_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.user-service.loadbalancer.server.port=3001"
+    depends_on:
+      - traefik
+    healthcheck:
+      test: ["CMD", "node", "-e", "const http = require('http'); const options = { host: 'localhost', port: 3001, path: '/health', timeout: 2000 }; const req = http.request(options, (res) => { process.exit(res.statusCode === 200 ? 0 : 1); }); req.on('error', () => process.exit(1)); req.end();"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Store Service  
+  store-service:
+    build:
+      context: ./apps/store-service
+      dockerfile: Dockerfile
+    container_name: store-service
+    restart: unless-stopped
+    environment:
+      - PORT=3002
+      - NODE_ENV=production
+    expose:
+      - "3002"
+    networks:
+      - microservice_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.store-service.loadbalancer.server.port=3002"
+    depends_on:
+      - traefik
+    healthcheck:
+      test: ["CMD", "node", "-e", "const http = require('http'); const options = { host: 'localhost', port: 3002, path: '/health', timeout: 2000 }; const req = http.request(options, (res) => { process.exit(res.statusCode === 200 ? 0 : 1); }); req.on('error', () => process.exit(1)); req.end();"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Order Service
+  order-service:
+    build:
+      context: ./apps/order-service
+      dockerfile: Dockerfile
+    container_name: order-service
+    restart: unless-stopped
+    environment:
+      - PORT=3003
+      - NODE_ENV=production
+    expose:
+      - "3003"
+    networks:
+      - microservice_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.order-service.loadbalancer.server.port=3003"
+    depends_on:
+      - traefik
+    healthcheck:
+      test: ["CMD", "node", "-e", "const http = require('http'); const options = { host: 'localhost', port: 3003, path: '/health', timeout: 2000 }; const req = http.request(options, (res) => { process.exit(res.statusCode === 200 ? 0 : 1); }); req.on('error', () => process.exit(1)); req.end();"]
+      interval: 30s
+      timeout: 10ss
+      retries: 3
+      start_period: 40s 

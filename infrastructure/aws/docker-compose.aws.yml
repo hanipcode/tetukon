@@ -1,0 +1,157 @@
+version: '3.8'
+
+# AWS ECS Docker Compose for production deployment
+x-aws-vpc: "vpc-xxxxxx"  # Replace with your VPC ID
+x-aws-cluster: "microservice-cluster"
+x-aws-loadbalancer: "microservice-alb"
+
+services:
+  # User Service
+  user-service:
+    image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/user-service:latest
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.25'
+        reservations:
+          memory: 256M
+          cpus: '0.125'
+    environment:
+      - PORT=3001
+      - NODE_ENV=production
+    expose:
+      - "3001"
+    networks:
+      - microservice_network
+    x-aws-autoscaling:
+      min: 1
+      max: 10
+      cpu: 70
+      memory: 80
+    healthcheck:
+      test: ["CMD", "node", "-e", "const http = require('http'); const options = { host: 'localhost', port: 3001, path: '/health', timeout: 2000 }; const req = http.request(options, (res) => { process.exit(res.statusCode === 200 ? 0 : 1); }); req.on('error', () => process.exit(1)); req.end();"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # Store Service
+  store-service:
+    image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/store-service:latest
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.25'
+        reservations:
+          memory: 256M
+          cpus: '0.125'
+    environment:
+      - PORT=3002
+      - NODE_ENV=production
+    expose:
+      - "3002"
+    networks:
+      - microservice_network
+    x-aws-autoscaling:
+      min: 1
+      max: 10
+      cpu: 70
+      memory: 80
+    healthcheck:
+      test: ["CMD", "node", "-e", "const http = require('http'); const options = { host: 'localhost', port: 3002, path: '/health', timeout: 2000 }; const req = http.request(options, (res) => { process.exit(res.statusCode === 200 ? 0 : 1); }); req.on('error', () => process.exit(1)); req.end();"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # Order Service
+  order-service:
+    image: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/order-service:latest
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.25'
+        reservations:
+          memory: 256M
+          cpus: '0.125'
+    environment:
+      - PORT=3003
+      - NODE_ENV=production
+    expose:
+      - "3003"
+    networks:
+      - microservice_network
+    x-aws-autoscaling:
+      min: 1
+      max: 10
+      cpu: 70
+      memory: 80
+    healthcheck:
+      test: ["CMD", "node", "-e", "const http = require('http'); const options = { host: 'localhost', port: 3003, path: '/health', timeout: 2000 }; const req = http.request(options, (res) => { process.exit(res.statusCode === 200 ? 0 : 1); }); req.on('error', () => process.exit(1)); req.end();"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # Application Load Balancer (ALB) configuration
+  alb:
+    x-aws-loadbalancer:
+      type: application
+      scheme: internet-facing
+      listeners:
+        - port: 80
+          protocol: HTTP
+          default_actions:
+            - type: forward
+              target_group_arn: !Ref DefaultTargetGroup
+        - port: 443
+          protocol: HTTPS
+          ssl_policy: ELBSecurityPolicy-TLS-1-2-2017-01
+          certificate_arn: ${SSL_CERT_ARN}
+          default_actions:
+            - type: forward
+              target_group_arn: !Ref DefaultTargetGroup
+      target_groups:
+        - name: user-service-tg
+          port: 3001
+          protocol: HTTP
+          health_check_path: /health
+          health_check_interval: 30
+          health_check_timeout: 5
+          healthy_threshold: 2
+          unhealthy_threshold: 3
+          matcher: "200"
+        - name: store-service-tg
+          port: 3002
+          protocol: HTTP
+          health_check_path: /health
+          health_check_interval: 30
+          health_check_timeout: 5
+          healthy_threshold: 2
+          unhealthy_threshold: 3
+          matcher: "200"
+        - name: order-service-tg
+          port: 3003
+          protocol: HTTP
+          health_check_path: /health
+          health_check_interval: 30
+          health_check_timeout: 5
+          healthy_threshold: 2
+          unhealthy_threshold: 3
+          matcher: "200"
+
+networks:
+  microservice_network:
+    x-aws-vpc:
+      enable_logs: true
+      subnets:
+        - subnet-xxxxxxxx  # Replace with your subnet IDs
+        - subnet-yyyyyyyy
+      security_groups:
+        - sg-xxxxxxxxx   # Replace with your security group ID 
