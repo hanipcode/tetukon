@@ -55,7 +55,7 @@ output "service_endpoints" {
     user_service      = "http://${module.alb.alb_dns_name}/users"
     store_service     = "http://${module.alb.alb_dns_name}/stores"
     order_service     = "http://${module.alb.alb_dns_name}/orders"
-    traefik_dashboard = "http://${module.alb.alb_dns_name}:8080"  # Note: May need port mapping
+    traefik_dashboard = "http://${module.alb.alb_dns_name}:8080" # Note: May need port mapping
   }
 }
 
