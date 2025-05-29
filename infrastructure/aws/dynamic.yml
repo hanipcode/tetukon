@@ -1,0 +1,122 @@
+# Traefik Dynamic Configuration for AWS ECS
+http:
+  routers:
+    # User Service Router
+    user-service-router:
+      rule: "PathPrefix(`/users`)"
+      service: "user-service-ecs"
+      entryPoints:
+        - "web"
+      middlewares:
+        - "strip-users-prefix"
+        - "cors-headers"
+
+    # Store Service Router
+    store-service-router:
+      rule: "PathPrefix(`/stores`)"
+      service: "store-service-ecs"
+      entryPoints:
+        - "web"
+      middlewares:
+        - "strip-stores-prefix"
+        - "cors-headers"
+
+    # Order Service Router
+    order-service-router:
+      rule: "PathPrefix(`/orders`)"
+      service: "order-service-ecs"
+      entryPoints:
+        - "web"
+      middlewares:
+        - "strip-orders-prefix"
+        - "cors-headers"
+
+  middlewares:
+    # Strip /users prefix for user service
+    strip-users-prefix:
+      stripPrefix:
+        prefixes:
+          - "/users"
+
+    # Strip /stores prefix for store service
+    strip-stores-prefix:
+      stripPrefix:
+        prefixes:
+          - "/stores"
+
+    # Strip /orders prefix for order service
+    strip-orders-prefix:
+      stripPrefix:
+        prefixes:
+          - "/orders"
+
+    # CORS middleware for cross-origin requests
+    cors-headers:
+      headers:
+        accessControlAllowMethods:
+          - "GET"
+          - "POST"
+          - "PUT"
+          - "DELETE"
+          - "OPTIONS"
+        accessControlAllowHeaders:
+          - "Content-Type"
+          - "Authorization"
+          - "X-Requested-With"
+        accessControlAllowOriginList:
+          - "*"
+        accessControlMaxAge: 100
+        addVaryHeader: true
+
+    # Rate limiting middleware
+    rate-limit:
+      rateLimit:
+        burst: 100
+        period: "1m"
+
+    # Security headers middleware
+    security-headers:
+      headers:
+        browserXssFilter: true
+        contentTypeNosniff: true
+        frameDeny: true
+        referrerPolicy: "strict-origin-when-cross-origin"
+        customRequestHeaders:
+          X-Forwarded-Proto: "https"
+
+  services:
+    # User Service - Uses ECS Service Discovery
+    user-service-ecs:
+      loadBalancer:
+        servers:
+          - url: "http://user-service.microservice-ecommerce-dev.local:3001"
+        healthCheck:
+          path: "/health"
+          interval: "30s"
+          timeout: "5s"
+          headers:
+            Host: "user-service"
+
+    # Store Service - Uses ECS Service Discovery  
+    store-service-ecs:
+      loadBalancer:
+        servers:
+          - url: "http://store-service.microservice-ecommerce-dev.local:3002"
+        healthCheck:
+          path: "/health"
+          interval: "30s"
+          timeout: "5s"
+          headers:
+            Host: "store-service"
+
+    # Order Service - Uses ECS Service Discovery
+    order-service-ecs:
+      loadBalancer:
+        servers:
+          - url: "http://order-service.microservice-ecommerce-dev.local:3003"
+        healthCheck:
+          path: "/health"
+          interval: "30s"
+          timeout: "5s"
+          headers:
+            Host: "order-service" 
