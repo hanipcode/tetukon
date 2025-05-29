@@ -52,7 +52,7 @@ resource "aws_lb" "main" {
 
 # Target Group for Traefik
 resource "aws_lb_target_group" "traefik" {
-  name     = "${var.project_name}-${var.environment}-traefik-tg"
+  name     = "${substr(var.project_name, 0, 15)}-${var.environment}-traefik"
   port     = 8000
   protocol = "HTTP"
   vpc_id   = var.vpc_id
@@ -71,7 +71,7 @@ resource "aws_lb_target_group" "traefik" {
   }
 
   tags = {
-    Name = "${var.project_name}-${var.environment}-traefik-tg"
+    Name = "${substr(var.project_name, 0, 15)}-${var.environment}-traefik-tg"
   }
 }
 
