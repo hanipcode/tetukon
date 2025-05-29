@@ -11,10 +11,13 @@ entryPoints:
     address: ":8080"
 
 providers:
+  # Docker provider for local development
   docker:
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
     network: "microservice_network"
+  
+  # File-based configuration for routing rules
   file:
     filename: /etc/traefik/dynamic.yml
     watch: true

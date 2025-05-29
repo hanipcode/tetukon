@@ -50,12 +50,10 @@ resource "aws_lb" "main" {
   }
 }
 
-# Target Groups
-resource "aws_lb_target_group" "services" {
-  for_each = var.service_ports
-
-  name     = "${var.project_name}-${var.environment}-${each.key}-tg"
-  port     = each.value
+# Target Group for Traefik
+resource "aws_lb_target_group" "traefik" {
+  name     = "${var.project_name}-${var.environment}-traefik-tg"
+  port     = 8000
   protocol = "HTTP"
   vpc_id   = var.vpc_id
   target_type = "ip"
@@ -66,57 +64,68 @@ resource "aws_lb_target_group" "services" {
     unhealthy_threshold = 3
     timeout             = 5
     interval            = 30
-    path                = "/health"
+    path                = "/ping"
     matcher             = "200"
-    port                = "traffic-port"
+    port                = "8080"  # Traefik dashboard/ping endpoint
     protocol            = "HTTP"
   }
 
   tags = {
-    Name    = "${var.project_name}-${var.environment}-${each.key}-tg"
-    Service = each.key
+    Name = "${var.project_name}-${var.environment}-traefik-tg"
   }
 }
 
-# ALB Listener (HTTP)
+# ALB Listener (HTTP) - Redirect to HTTPS if enabled
 resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.main.arn
   port              = "80"
   protocol          = "HTTP"
 
   default_action {
-    type = "fixed-response"
-    fixed_response {
-      content_type = "application/json"
-      message_body = jsonencode({
-        error   = "Not Found"
-        message = "The requested path was not found"
-      })
-      status_code = "404"
+    type = var.enable_https ? "redirect" : "forward"
+    
+    dynamic "redirect" {
+      for_each = var.enable_https ? [1] : []
+      content {
+        port        = "443"
+        protocol    = "HTTPS"
+        status_code = "HTTP_301"
+      }
+    }
+
+    dynamic "forward" {
+      for_each = var.enable_https ? [] : [1]
+      content {
+        target_group {
+          arn = aws_lb_target_group.traefik.arn
+        }
+      }
     }
   }
 }
 
-# ALB Listener Rules
-resource "aws_lb_listener_rule" "services" {
-  for_each = var.service_ports
+# ALB Listener (HTTPS) - Only if HTTPS is enabled
+resource "aws_lb_listener" "https" {
+  count = var.enable_https ? 1 : 0
+  
+  load_balancer_arn = aws_lb.main.arn
+  port              = "443"
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-TLS-1-2-2017-01"
+  certificate_arn   = var.ssl_certificate_arn
 
-  listener_arn = aws_lb_listener.http.arn
-  priority     = 100 + index(keys(var.service_ports), each.key)
-
-  action {
+  default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.services[each.key].arn
+    target_group_arn = aws_lb_target_group.traefik.arn
   }
+}
 
-  condition {
-    path_pattern {
-      values = ["/${each.key == "user-service" ? "users" : each.key == "store-service" ? "stores" : "orders"}*"]
-    }
-  }
+# CloudWatch Log Group for ALB (optional)
+resource "aws_cloudwatch_log_group" "alb_logs" {
+  name              = "/aws/elasticloadbalancing/${var.project_name}-${var.environment}-alb"
+  retention_in_days = 7
 
   tags = {
-    Name    = "${var.project_name}-${var.environment}-${each.key}-rule"
-    Service = each.key
+    Name = "${var.project_name}-${var.environment}-alb-logs"
   }
 } 

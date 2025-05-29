@@ -1,10 +1,10 @@
-aws_region   = "us-west-2"
+aws_region   = "ap-southeast-1"
 environment  = "prod"
 project_name = "microservice-ecommerce"
 
 # VPC Configuration
 vpc_cidr = "10.0.0.0/16"
-availability_zones = ["us-west-2a", "us-west-2b", "us-west-2c"]
+availability_zones = ["ap-southeast-1a", "ap-southeast-1b", "ap-southeast-1c"]
 public_subnet_cidrs  = ["10.0.10.0/24", "10.0.11.0/24", "10.0.12.0/24"]
 private_subnet_cidrs = ["10.0.20.0/24", "10.0.21.0/24", "10.0.22.0/24"]
 

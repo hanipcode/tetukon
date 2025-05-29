@@ -5,7 +5,7 @@
 #   backend "s3" {
 #     bucket         = "your-terraform-state-bucket"
 #     key            = "microservice-ecommerce/terraform.tfstate"
-#     region         = "us-west-2"
+#     region         = "ap-southeast-1"
 #     encrypt        = true
 #     dynamodb_table = "terraform-state-lock"
 #   }

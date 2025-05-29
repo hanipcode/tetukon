@@ -18,20 +18,17 @@ variable "public_subnet_ids" {
   type        = list(string)
 }
 
-variable "enable_https" {
-  description = "Enable HTTPS listener on ALB"
-  type        = bool
-  default     = false
+variable "service_names" {
+  description = "List of service names"
+  type        = list(string)
 }
 
-variable "ssl_certificate_arn" {
-  description = "ARN of SSL certificate for ALB HTTPS listener"
-  type        = string
-  default     = ""
+variable "service_ports" {
+  description = "Map of service names to their ports"
+  type        = map(number)
 }
 
-variable "domain_name" {
-  description = "Domain name for the application"
+variable "alb_security_group_id" {
+  description = "ID of the ALB security group"
   type        = string
-  default     = ""
 } 

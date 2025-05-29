@@ -1,0 +1,11 @@
+FROM traefik:v3.0
+
+# Add AWS CLI for ECS service discovery
+RUN apk add --no-cache aws-cli
+
+# Copy AWS-specific traefik configuration files
+COPY infrastructure/traefik/aws/traefik.yml /etc/traefik/traefik.yml
+COPY infrastructure/traefik/aws/dynamic.yml /etc/traefik/dynamic.yml
+
+# Set default command (can be overridden by ECS task definition)
+CMD ["traefik", "--configfile=/etc/traefik/traefik.yml"] 

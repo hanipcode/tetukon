@@ -18,14 +18,19 @@ variable "private_subnet_ids" {
   type        = list(string)
 }
 
-variable "alb_security_group_id" {
-  description = "ID of the ALB security group"
+variable "public_subnet_ids" {
+  description = "List of public subnet IDs (for Traefik)"
+  type        = list(string)
+}
+
+variable "traefik_security_group_id" {
+  description = "ID of the Traefik security group"
   type        = string
 }
 
-variable "target_group_arns" {
-  description = "Map of service names to target group ARNs"
-  type        = map(string)
+variable "traefik_target_group_arn" {
+  description = "ARN of the ALB target group for Traefik"
+  type        = string
 }
 
 variable "ecr_repository_urls" {

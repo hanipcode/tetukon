@@ -49,12 +49,13 @@ output "ecr_repository_arns" {
 }
 
 output "service_endpoints" {
-  description = "Service endpoints through the load balancer"
+  description = "Service endpoints through ALB + Traefik"
   value = {
-    api_gateway    = "http://${module.alb.alb_dns_name}"
-    user_service   = "http://${module.alb.alb_dns_name}/users"
-    store_service  = "http://${module.alb.alb_dns_name}/stores"
-    order_service  = "http://${module.alb.alb_dns_name}/orders"
+    api_gateway       = "http://${module.alb.alb_dns_name}"
+    user_service      = "http://${module.alb.alb_dns_name}/users"
+    store_service     = "http://${module.alb.alb_dns_name}/stores"
+    order_service     = "http://${module.alb.alb_dns_name}/orders"
+    traefik_dashboard = "http://${module.alb.alb_dns_name}:8080"  # Note: May need port mapping
   }
 }
 
@@ -66,4 +67,9 @@ output "ecs_service_names" {
 output "cloudwatch_log_groups" {
   description = "CloudWatch log group names"
   value       = module.ecs.log_group_names
+}
+
+output "service_discovery_namespace" {
+  description = "Service discovery namespace ID"
+  value       = module.ecs.service_discovery_namespace_id
 } 

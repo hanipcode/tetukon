@@ -1,0 +1,43 @@
+# Traefik Static Configuration for AWS ECS
+api:
+  dashboard: true
+  debug: true
+  insecure: true
+
+entryPoints:
+  web:
+    address: ":8000"
+  websecure:
+    address: ":8443"
+  traefik:
+    address: ":8080"
+
+providers:
+  # ECS Service Discovery for dynamic service detection
+  ecs:
+    region: "${AWS_REGION}"
+    clusters:
+      - "${ECS_CLUSTER_NAME}"
+    autoDiscoverClusters: false
+    exposedByDefault: false
+  
+  # File-based configuration for routing rules
+  file:
+    filename: /etc/traefik/dynamic.yml
+    watch: true
+
+log:
+  level: INFO
+  format: json
+
+accessLog:
+  format: json
+
+metrics:
+  prometheus:
+    addEntryPointsLabels: true
+    addServicesLabels: true
+
+# Enable ping endpoint for health checks
+ping:
+  entryPoint: "traefik" 

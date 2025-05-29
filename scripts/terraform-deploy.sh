@@ -119,6 +119,7 @@ get_terraform_outputs() {
         echo "  👤 User Service: http://$ALB_DNS/users"
         echo "  🏪 Store Service: http://$ALB_DNS/stores"
         echo "  📦 Order Service: http://$ALB_DNS/orders"
+        echo "  📊 Traefik Dashboard: http://$ALB_DNS:8080"
     fi
     
     cd - > /dev/null
