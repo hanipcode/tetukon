@@ -89,22 +89,41 @@ jobs:
         AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
         
         # Login to ECR
+        echo "🔍 Logging into ECR..."
         aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
         
         # Get Traefik ECR URL
         TRAEFIK_ECR_URL=$(echo '${{ steps.outputs.outputs.ecr_urls }}' | jq -r '.traefik' 2>/dev/null || echo "")
         
         if [ -n "$TRAEFIK_ECR_URL" ] && [ "$TRAEFIK_ECR_URL" != "null" ]; then
-          echo "Building and pushing Traefik image..."
+          echo "🔍 Building Traefik image..."
+          echo "🔍 ECR URL: $TRAEFIK_ECR_URL"
+          echo "🔍 Current directory: $(pwd)"
+          echo "🔍 Checking Dockerfile exists:"
+          ls -la infrastructure/aws/Dockerfile.traefik
+          echo "🔍 Checking config files exist:"
+          ls -la infrastructure/traefik/aws/
           
-          # Build Traefik image
-          docker build -f infrastructure/aws/Dockerfile.traefik -t traefik .
+          # Build Traefik image with verbose output
+          echo "🔨 Building Docker image..."
+          if docker build -f infrastructure/aws/Dockerfile.traefik -t traefik:latest .; then
+            echo "✅ Docker build successful"
+          else
+            echo "❌ Docker build failed"
+            exit 1
+          fi
+          
+          # Verify image was created
+          echo "🔍 Verifying image was created:"
+          docker images | grep traefik
           
           # Tag for ECR
+          echo "🏷️ Tagging images..."
           docker tag traefik:latest $TRAEFIK_ECR_URL:latest
           docker tag traefik:latest $TRAEFIK_ECR_URL:$(date +%Y%m%d-%H%M%S)
           
           # Push to ECR
+          echo "📤 Pushing to ECR..."
           docker push $TRAEFIK_ECR_URL:latest
           docker push $TRAEFIK_ECR_URL:$(date +%Y%m%d-%H%M%S)
           
@@ -126,7 +145,7 @@ jobs:
           echo "**Service Endpoints:**" >> $GITHUB_STEP_SUMMARY
           echo "- 🌐 **API Gateway**: http://${{ steps.outputs.outputs.alb_dns }}" >> $GITHUB_STEP_SUMMARY
           echo "- 👤 **User Service**: http://${{ steps.outputs.outputs.alb_dns }}/users" >> $GITHUB_STEP_SUMMARY
-          echo "- �� **Store Service**: http://${{ steps.outputs.outputs.alb_dns }}/stores" >> $GITHUB_STEP_SUMMARY
+          echo "- 🌍 **Store Service**: http://${{ steps.outputs.outputs.alb_dns }}/stores" >> $GITHUB_STEP_SUMMARY
           echo "- 📦 **Order Service**: http://${{ steps.outputs.outputs.alb_dns }}/orders" >> $GITHUB_STEP_SUMMARY
           echo "- 📊 **Traefik Dashboard**: http://${{ steps.outputs.outputs.alb_dns }}:8080" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
