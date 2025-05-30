@@ -1,0 +1,1523 @@
+{
+ "Resources": {
+  "UserServiceServiceRole514E41EC": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/UserService/ServiceRole/Resource"
+   }
+  },
+  "UserService39A960CB": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "cf2a7c2fab1cb31fb74e88cc5d0b2185356957e95efb458a65bc83feafa1caa1.zip"
+    },
+    "Handler": "dist/handler.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "UserServiceServiceRole514E41EC",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x"
+   },
+   "DependsOn": [
+    "UserServiceServiceRole514E41EC"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/UserService/Resource",
+    "aws:asset:path": "asset.cf2a7c2fab1cb31fb74e88cc5d0b2185356957e95efb458a65bc83feafa1caa1",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "StoreServiceServiceRole66C8379C": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/StoreService/ServiceRole/Resource"
+   }
+  },
+  "StoreService5A9135FD": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "7e1b16aeb95037dc88e45ffc05e2abeb16b2a7aeffb2d2a337a7e7a87482809d.zip"
+    },
+    "Handler": "dist/handler.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "StoreServiceServiceRole66C8379C",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x"
+   },
+   "DependsOn": [
+    "StoreServiceServiceRole66C8379C"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/StoreService/Resource",
+    "aws:asset:path": "asset.7e1b16aeb95037dc88e45ffc05e2abeb16b2a7aeffb2d2a337a7e7a87482809d",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "OrderServiceServiceRole40C312C2": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/OrderService/ServiceRole/Resource"
+   }
+  },
+  "OrderService34E51BCF": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "c5b62cc92fa4571758f4b97b941cc287fce341452be574e59fd736de8ddf6fdf.zip"
+    },
+    "Handler": "dist/handler.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "OrderServiceServiceRole40C312C2",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x"
+   },
+   "DependsOn": [
+    "OrderServiceServiceRole40C312C2"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/OrderService/Resource",
+    "aws:asset:path": "asset.c5b62cc92fa4571758f4b97b941cc287fce341452be574e59fd736de8ddf6fdf",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "ECommerceApiE79CFB4A": {
+   "Type": "AWS::ApiGateway::RestApi",
+   "Properties": {
+    "Name": "E-Commerce API"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/ECommerceApi/Resource"
+   }
+  },
+  "ECommerceApiCloudWatchRoleA0000002": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "apigateway.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+       ]
+      ]
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/ECommerceApi/CloudWatchRole/Resource"
+   }
+  },
+  "ECommerceApiAccountA3F17E7C": {
+   "Type": "AWS::ApiGateway::Account",
+   "Properties": {
+    "CloudWatchRoleArn": {
+     "Fn::GetAtt": [
+      "ECommerceApiCloudWatchRoleA0000002",
+      "Arn"
+     ]
+    }
+   },
+   "DependsOn": [
+    "ECommerceApiE79CFB4A"
+   ],
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/ECommerceApi/Account"
+   }
+  },
+  "ECommerceApiDeploymentC537DBB6afa5b60769959ab1fad0f3cb0c99ef6d": {
+   "Type": "AWS::ApiGateway::Deployment",
+   "Properties": {
+    "Description": "Automatically created by the RestApi construct",
+    "RestApiId": {
+     "Ref": "ECommerceApiE79CFB4A"
+    }
+   },
+   "DependsOn": [
+    "ECommerceApiordersproxyANY4C3335AA",
+    "ECommerceApiordersproxy7EFAF6FE",
+    "ECommerceApiordersANYD64A140B",
+    "ECommerceApiorders2C7B5D79",
+    "ECommerceApistoresproxyANY83EA50D2",
+    "ECommerceApistoresproxy7DFD046C",
+    "ECommerceApistoresANYD2669C68",
+    "ECommerceApistoresF6277277",
+    "ECommerceApiusersproxyANY87D66D8E",
+    "ECommerceApiusersproxy9777C15B",
+    "ECommerceApiusersANY0C2CBBC0",
+    "ECommerceApiusers884DE5D9"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/ECommerceApi/Deployment/Resource"
+   }
+  },
+  "ECommerceApiDeploymentStageprod34BEADF8": {
+   "Type": "AWS::ApiGateway::Stage",
+   "Properties": {
+    "DeploymentId": {
+     "Ref": "ECommerceApiDeploymentC537DBB6afa5b60769959ab1fad0f3cb0c99ef6d"
+    },
+    "RestApiId": {
+     "Ref": "ECommerceApiE79CFB4A"
+    },
+    "StageName": "prod"
+   },
+   "DependsOn": [
+    "ECommerceApiAccountA3F17E7C"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/ECommerceApi/DeploymentStage.prod/Resource"
+   }
+  },
+  "ECommerceApiusers884DE5D9": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "ECommerceApiE79CFB4A",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "users",
+    "RestApiId": {
+     "Ref": "ECommerceApiE79CFB4A"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/ECommerceApi/Default/users/Resource"
+   }
+  },
+  "ECommerceApiusersANYApiPermissionECommerceStackECommerceApi87B1DA2CANYusers09705FCC": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "UserService39A960CB",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ECommerceApiE79CFB4A"
+       },
+       "/",
+       {
+        "Ref": "ECommerceApiDeploymentStageprod34BEADF8"
+       },
+       "/*/users"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/ECommerceApi/Default/users/ANY/ApiPermission.ECommerceStackECommerceApi87B1DA2C.ANY..users"
+   }
+  },
+  "ECommerceApiusersANYApiPermissionTestECommerceStackECommerceApi87B1DA2CANYusers3591B333": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "UserService39A960CB",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ECommerceApiE79CFB4A"
+       },
+       "/test-invoke-stage/*/users"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/ECommerceApi/Default/users/ANY/ApiPermission.Test.ECommerceStackECommerceApi87B1DA2C.ANY..users"
+   }
+  },
+  "ECommerceApiusersANY0C2CBBC0": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "ANY",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "UserService39A960CB",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "ECommerceApiusers884DE5D9"
+    },
+    "RestApiId": {
+     "Ref": "ECommerceApiE79CFB4A"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/ECommerceApi/Default/users/ANY/Resource"
+   }
+  },
+  "ECommerceApiusersproxy9777C15B": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "ECommerceApiusers884DE5D9"
+    },
+    "PathPart": "{proxy+}",
+    "RestApiId": {
+     "Ref": "ECommerceApiE79CFB4A"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/ECommerceApi/Default/users/{proxy+}/Resource"
+   }
+  },
+  "ECommerceApiusersproxyANYApiPermissionECommerceStackECommerceApi87B1DA2CANYusersproxy8A134455": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "UserService39A960CB",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ECommerceApiE79CFB4A"
+       },
+       "/",
+       {
+        "Ref": "ECommerceApiDeploymentStageprod34BEADF8"
+       },
+       "/*/users/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/ECommerceApi/Default/users/{proxy+}/ANY/ApiPermission.ECommerceStackECommerceApi87B1DA2C.ANY..users.{proxy+}"
+   }
+  },
+  "ECommerceApiusersproxyANYApiPermissionTestECommerceStackECommerceApi87B1DA2CANYusersproxy10BB6323": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "UserService39A960CB",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ECommerceApiE79CFB4A"
+       },
+       "/test-invoke-stage/*/users/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/ECommerceApi/Default/users/{proxy+}/ANY/ApiPermission.Test.ECommerceStackECommerceApi87B1DA2C.ANY..users.{proxy+}"
+   }
+  },
+  "ECommerceApiusersproxyANY87D66D8E": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "ANY",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "UserService39A960CB",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "ECommerceApiusersproxy9777C15B"
+    },
+    "RestApiId": {
+     "Ref": "ECommerceApiE79CFB4A"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/ECommerceApi/Default/users/{proxy+}/ANY/Resource"
+   }
+  },
+  "ECommerceApistoresF6277277": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "ECommerceApiE79CFB4A",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "stores",
+    "RestApiId": {
+     "Ref": "ECommerceApiE79CFB4A"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/ECommerceApi/Default/stores/Resource"
+   }
+  },
+  "ECommerceApistoresANYApiPermissionECommerceStackECommerceApi87B1DA2CANYstores15612D9B": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "StoreService5A9135FD",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ECommerceApiE79CFB4A"
+       },
+       "/",
+       {
+        "Ref": "ECommerceApiDeploymentStageprod34BEADF8"
+       },
+       "/*/stores"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/ECommerceApi/Default/stores/ANY/ApiPermission.ECommerceStackECommerceApi87B1DA2C.ANY..stores"
+   }
+  },
+  "ECommerceApistoresANYApiPermissionTestECommerceStackECommerceApi87B1DA2CANYstores5F02F833": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "StoreService5A9135FD",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ECommerceApiE79CFB4A"
+       },
+       "/test-invoke-stage/*/stores"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/ECommerceApi/Default/stores/ANY/ApiPermission.Test.ECommerceStackECommerceApi87B1DA2C.ANY..stores"
+   }
+  },
+  "ECommerceApistoresANYD2669C68": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "ANY",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "StoreService5A9135FD",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "ECommerceApistoresF6277277"
+    },
+    "RestApiId": {
+     "Ref": "ECommerceApiE79CFB4A"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/ECommerceApi/Default/stores/ANY/Resource"
+   }
+  },
+  "ECommerceApistoresproxy7DFD046C": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "ECommerceApistoresF6277277"
+    },
+    "PathPart": "{proxy+}",
+    "RestApiId": {
+     "Ref": "ECommerceApiE79CFB4A"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/ECommerceApi/Default/stores/{proxy+}/Resource"
+   }
+  },
+  "ECommerceApistoresproxyANYApiPermissionECommerceStackECommerceApi87B1DA2CANYstoresproxyABE1C5A1": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "StoreService5A9135FD",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ECommerceApiE79CFB4A"
+       },
+       "/",
+       {
+        "Ref": "ECommerceApiDeploymentStageprod34BEADF8"
+       },
+       "/*/stores/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/ECommerceApi/Default/stores/{proxy+}/ANY/ApiPermission.ECommerceStackECommerceApi87B1DA2C.ANY..stores.{proxy+}"
+   }
+  },
+  "ECommerceApistoresproxyANYApiPermissionTestECommerceStackECommerceApi87B1DA2CANYstoresproxy0C928390": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "StoreService5A9135FD",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ECommerceApiE79CFB4A"
+       },
+       "/test-invoke-stage/*/stores/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/ECommerceApi/Default/stores/{proxy+}/ANY/ApiPermission.Test.ECommerceStackECommerceApi87B1DA2C.ANY..stores.{proxy+}"
+   }
+  },
+  "ECommerceApistoresproxyANY83EA50D2": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "ANY",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "StoreService5A9135FD",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "ECommerceApistoresproxy7DFD046C"
+    },
+    "RestApiId": {
+     "Ref": "ECommerceApiE79CFB4A"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/ECommerceApi/Default/stores/{proxy+}/ANY/Resource"
+   }
+  },
+  "ECommerceApiorders2C7B5D79": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "ECommerceApiE79CFB4A",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "orders",
+    "RestApiId": {
+     "Ref": "ECommerceApiE79CFB4A"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/ECommerceApi/Default/orders/Resource"
+   }
+  },
+  "ECommerceApiordersANYApiPermissionECommerceStackECommerceApi87B1DA2CANYorders031A4B98": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "OrderService34E51BCF",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ECommerceApiE79CFB4A"
+       },
+       "/",
+       {
+        "Ref": "ECommerceApiDeploymentStageprod34BEADF8"
+       },
+       "/*/orders"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/ECommerceApi/Default/orders/ANY/ApiPermission.ECommerceStackECommerceApi87B1DA2C.ANY..orders"
+   }
+  },
+  "ECommerceApiordersANYApiPermissionTestECommerceStackECommerceApi87B1DA2CANYorders94382019": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "OrderService34E51BCF",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ECommerceApiE79CFB4A"
+       },
+       "/test-invoke-stage/*/orders"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/ECommerceApi/Default/orders/ANY/ApiPermission.Test.ECommerceStackECommerceApi87B1DA2C.ANY..orders"
+   }
+  },
+  "ECommerceApiordersANYD64A140B": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "ANY",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "OrderService34E51BCF",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "ECommerceApiorders2C7B5D79"
+    },
+    "RestApiId": {
+     "Ref": "ECommerceApiE79CFB4A"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/ECommerceApi/Default/orders/ANY/Resource"
+   }
+  },
+  "ECommerceApiordersproxy7EFAF6FE": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "ECommerceApiorders2C7B5D79"
+    },
+    "PathPart": "{proxy+}",
+    "RestApiId": {
+     "Ref": "ECommerceApiE79CFB4A"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/ECommerceApi/Default/orders/{proxy+}/Resource"
+   }
+  },
+  "ECommerceApiordersproxyANYApiPermissionECommerceStackECommerceApi87B1DA2CANYordersproxyBEF6382A": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "OrderService34E51BCF",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ECommerceApiE79CFB4A"
+       },
+       "/",
+       {
+        "Ref": "ECommerceApiDeploymentStageprod34BEADF8"
+       },
+       "/*/orders/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/ECommerceApi/Default/orders/{proxy+}/ANY/ApiPermission.ECommerceStackECommerceApi87B1DA2C.ANY..orders.{proxy+}"
+   }
+  },
+  "ECommerceApiordersproxyANYApiPermissionTestECommerceStackECommerceApi87B1DA2CANYordersproxy812150E3": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "OrderService34E51BCF",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "ECommerceApiE79CFB4A"
+       },
+       "/test-invoke-stage/*/orders/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/ECommerceApi/Default/orders/{proxy+}/ANY/ApiPermission.Test.ECommerceStackECommerceApi87B1DA2C.ANY..orders.{proxy+}"
+   }
+  },
+  "ECommerceApiordersproxyANY4C3335AA": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "ANY",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "OrderService34E51BCF",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "ECommerceApiordersproxy7EFAF6FE"
+    },
+    "RestApiId": {
+     "Ref": "ECommerceApiE79CFB4A"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/ECommerceApi/Default/orders/{proxy+}/ANY/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/01O0W7CMAz8Ft7TbMDLeCybeJuG2AegkHqdaZNUtQOrqvz7nBYEUqS7s3PnW+nlZqNfF+ZKha2aosWTHr/Z2EbJ6Di2xp0qo8dd9JYxePX+45/5HnqHRKKSQuP0eAgt5EXGpGh9NETApMsMovU22gZ4awiU6bA2DFcziA+Iyw4n64OW1oboWX1A14bBgVCZPimpWk/3ZiLWEHsLU/xd3DJn/gn8G6o8urF9H/6G+zqlh2tqnGPR1/n/V+QuclI+VKDP9HJZvml5q8WZEIteaqIDfZjxHwH4+aVYAQAA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ECommerceStack/CDKMetadata/Default"
+   },
+   "Condition": "CDKMetadataAvailable"
+  }
+ },
+ "Outputs": {
+  "ECommerceApiEndpointA4C226BB": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "ECommerceApiE79CFB4A"
+      },
+      ".execute-api.",
+      {
+       "Ref": "AWS::Region"
+      },
+      ".",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "ECommerceApiDeploymentStageprod34BEADF8"
+      },
+      "/"
+     ]
+    ]
+   }
+  },
+  "ApiUrl": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "ECommerceApiE79CFB4A"
+      },
+      ".execute-api.",
+      {
+       "Ref": "AWS::Region"
+      },
+      ".",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "ECommerceApiDeploymentStageprod34BEADF8"
+      },
+      "/"
+     ]
+    ]
+   }
+  }
+ },
+ "Conditions": {
+  "CDKMetadataAvailable": {
+   "Fn::Or": [
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "af-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-3"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-4"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-northwest-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-2"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "il-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "sa-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-west-1"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Equals": [
+      {
+       "Ref": "AWS::Region"
+      },
+      "us-west-2"
+     ]
+    }
+   ]
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

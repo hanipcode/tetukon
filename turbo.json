@@ -5,7 +5,7 @@
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**", "lib/**"]
     },
     "lint": {
       "dependsOn": ["^lint"]
@@ -19,6 +19,20 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "deploy": {
+      "dependsOn": ["build"],
+      "cache": false
+    },
+    "bootstrap": {
+      "cache": false
+    },
+    "destroy": {
+      "cache": false
+    },
+    "synth": {
+      "dependsOn": ["build"],
+      "outputs": ["cdk.out/**"]
     }
   }
 }

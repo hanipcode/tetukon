@@ -1,0 +1,24 @@
+{
+  "name": "@repo/infra",
+  "version": "1.0.0",
+  "description": "CDK infrastructure for e-commerce microservices",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk",
+    "deploy": "cdk deploy",
+    "destroy": "cdk destroy",
+    "synth": "cdk synth",
+    "bootstrap": "cdk bootstrap"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "aws-cdk": "^2.138.0",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.138.0",
+    "constructs": "^10.3.0"
+  }
+} 

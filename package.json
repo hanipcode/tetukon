@@ -8,7 +8,12 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "type-check": "turbo run type-check",
-    "clean": "turbo run clean"
+    "clean": "turbo run clean",
+    "deploy": "turbo run build && turbo run deploy --filter=@repo/infra",
+    "infra:bootstrap": "turbo run bootstrap --filter=@repo/infra",
+    "infra:deploy": "turbo run deploy --filter=@repo/infra",
+    "infra:destroy": "turbo run destroy --filter=@repo/infra",
+    "infra:synth": "turbo run synth --filter=@repo/infra"
   },
   "devDependencies": {
     "prettier": "^3.5.3",
@@ -22,5 +27,10 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "@types/aws-lambda": "^8.10.149",
+    "aws-cdk-lib": "^2.199.0",
+    "constructs": "^10.4.2"
+  }
 }
