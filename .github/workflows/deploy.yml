@@ -29,13 +29,7 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
-
-      - name: 🆔 Get AWS Account ID
-        run: |
-          ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
-          echo "CDK_DEFAULT_ACCOUNT=$ACCOUNT_ID" >> $GITHUB_ENV
-          echo "CDK_DEFAULT_REGION=${{ secrets.AWS_DEFAULT_REGION }}" >> $GITHUB_ENV
-          echo "AWS account ID: $ACCOUNT_ID"
+          mask-aws-account-id: false
 
       - name: 🔍 CDK Bootstrap (if needed)
         run: |
@@ -82,7 +76,7 @@ jobs:
           echo "## 🚀 Deployment Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Region:** ${{ secrets.AWS_DEFAULT_REGION }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Account:** ${{ env.CDK_DEFAULT_ACCOUNT }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Account:** ${{ env.AWS_ACCOUNT_ID }}" >> $GITHUB_STEP_SUMMARY
           echo "**Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
           echo "**Actor:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
