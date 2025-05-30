@@ -14,7 +14,8 @@ app.get('/health', (req, res) => {
     status: 'OK',
     service: 'order-service',
     timestamp: new Date().toISOString(),
-    uptime: process.uptime()
+    uptime: process.uptime(),
+    action: true,
   });
 });
 
